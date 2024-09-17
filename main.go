@@ -32,6 +32,6 @@ func main() {
 
 	
 	appPort := ":8080"
-	apps.RunServer(appPort)
+	apps.RunServer(appPort, db)
 }
 
