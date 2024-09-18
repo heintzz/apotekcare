@@ -57,3 +57,48 @@ func (h handler) registerUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	resp.WriteJsonResponse(w)
 }
+
+func (h handler) loginUserHandler(w http.ResponseWriter, r *http.Request) {
+	var req loginRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		resp := helper.APIResponse{
+			HttpCode: http.StatusBadRequest,
+			Success:  false,
+			Message: "bad request",
+			Error:   err.Error(),			
+		}
+
+		resp.WriteJsonResponse(w)
+		return
+	}
+
+	tokenString, err := h.svc.loginUser(req)
+	if err != nil {
+		errors, ok := helper.ErrorMapping[err.Error()]
+		if !ok {
+			errors = helper.ErrorGeneral
+		}
+		resp := helper.APIResponse{
+			HttpCode: errors.HttpCode,
+			Success: false,
+			Message: errors.ErrorMessage(),
+			Error:   err.Error(),
+			ErrorCode: errors.Code,
+		}
+
+		resp.WriteJsonResponse(w)
+		return
+	}
+
+		resp := helper.APIResponse{
+		HttpCode: http.StatusOK,
+		Success:  true,	
+		Message: "login success",
+		Payload: map[string]interface{}{
+			"token": tokenString,
+		},
+	}
+	resp.WriteJsonResponse(w)
+}

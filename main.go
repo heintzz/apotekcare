@@ -3,6 +3,7 @@ package main
 import (
 	"heintzz/ecommerce/apps"
 	"heintzz/ecommerce/external/database"
+	"heintzz/ecommerce/internal/utils"
 	"log"
 	"os"
 
@@ -20,6 +21,8 @@ func main() {
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PASSWORD")
 	dbname := os.Getenv("DB_NAME")
+
+	utils.InitToken(os.Getenv("JWT_SECRET_KEY"), 60) 
 	
 	db, err := database.ConnectPostgres(host, port, user, password, dbname)
 	if err != nil {

@@ -10,3 +10,8 @@ func Hash(plain string) (hash string, err error) {
 	hash = string(hashByte)
 	return
 }
+
+func Verify(plain string, hash string) (err error) {
+	err = bcrypt.CompareHashAndPassword([]byte(hash), []byte(plain))
+	return
+}

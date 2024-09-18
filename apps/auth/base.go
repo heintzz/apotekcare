@@ -13,6 +13,7 @@ func Run(router chi.Router, db *sql.DB) {
 
 	router.Route("/v1/auth", func(r chi.Router) {
 		r.Post("/register/user", handler.registerUserHandler)		
+		r.Post("/login/user", handler.loginUserHandler)		
 	})
 }
 
