@@ -17,13 +17,13 @@ func newHandler(svc service) handler {
 }
 
 func (h handler) registerUserHandler(w http.ResponseWriter, r *http.Request) {
-	var req RegisterRequest
+	var req registerRequest
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		resp := helper.APIResponse{
+			HttpCode: http.StatusBadRequest,
 			Success:  false,
-			Status: http.StatusBadRequest,
 			Message: "bad request",
 			Error:   err.Error(),			
 		}
@@ -32,22 +32,27 @@ func (h handler) registerUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	auth := NewAuth(req.Email, req.Password, req.Fullname)
-	err = h.svc.createUser(auth)
+	err = h.svc.createUser(req)
 	if err != nil {
-		resp := helper.APIResponse{
-			Success: false,
-			Status: http.StatusBadRequest,
-			Message: "internal server error",
-			Error:   err.Error(),
+		errors, ok := helper.ErrorMapping[err.Error()]
+		if !ok {
+			errors = helper.ErrorGeneral
 		}
+		resp := helper.APIResponse{
+			HttpCode: errors.HttpCode,
+			Success: false,
+			Message: errors.ErrorMessage(),
+			Error:   err.Error(),
+			ErrorCode: errors.Code,
+		}
+
 		resp.WriteJsonResponse(w)
 		return
 	}
 
 	resp := helper.APIResponse{
-		Success:  true,
-		Status: http.StatusOK,
+		HttpCode: http.StatusOK,
+		Success:  true,	
 		Message: "registration success",
 	}
 	resp.WriteJsonResponse(w)

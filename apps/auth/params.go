@@ -1,17 +1,17 @@
 package auth
 
 import (
-	"errors"
+	"heintzz/ecommerce/internal/helper"
 	"regexp"
 )
 
-type RegisterRequest struct {
+type registerRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 	Fullname string `json:"fullname"`
 }
 
-func (req RegisterRequest) Validate() error {
+func (req registerRequest) Validate() error {
 	if err := req.ValidateEmail(); err != nil {
 		return err
 	}
@@ -24,32 +24,32 @@ func (req RegisterRequest) Validate() error {
 	return nil
 }
 
-func (req RegisterRequest) ValidateEmail() error {
+func (req registerRequest) ValidateEmail() error {
 	if req.Email == "" {
-		return errors.New("email is required")
+		return helper.ErrEmailRequired
 	}
 	
 	emailRegex := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
 	if match, _ := regexp.MatchString(emailRegex, req.Email); !match {
-		return errors.New("invalid email format")
+		return helper.ErrEmailInvalid
 	}
 
 	return nil
 }
 
-func (req RegisterRequest) ValidatePassword() error {
+func (req registerRequest) ValidatePassword() error {
 	if req.Password == "" {
-		return errors.New("password is required")
+		return helper.ErrPasswordRequired
 	}
 	if len(req.Password) < 6 {
-		return errors.New("password must be at least 6 characters long")
+		return helper.ErrPasswordInvalidLength
 	}
 	return nil
 }
 
-func (req RegisterRequest) ValidateFullname() error {
+func (req registerRequest) ValidateFullname() error {
 	if req.Fullname == "" {
-		return errors.New("fullname is required")
+		return helper.ErrFullnameRequired
 	}
 	return nil
 }

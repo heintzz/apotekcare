@@ -2,7 +2,7 @@ package auth
 
 import (
 	"database/sql"
-	"fmt"
+	"heintzz/ecommerce/internal/helper"
 	"heintzz/ecommerce/internal/utils"
 	"log"
 )
@@ -22,23 +22,30 @@ func newService(repo repositoryContract) service {
 	}
 }
 
-func (s service) createUser(auth Auth) (err error) {
-	existingAuth, err := s.repo.getByEmail(auth.Email)
+func (s service) createUser(req registerRequest) (err error) {
+	err = req.Validate()
+	if err != nil {
+		return
+	}
+
+	existingAuth, err := s.repo.getByEmail(req.Email)
 	if err != nil && err != sql.ErrNoRows { 
 		log.Println("error when trying to check if email exists", err.Error())
 		return
 	}
 
 	if existingAuth.Email != "" {
-		log.Println("email already registered")
-		return fmt.Errorf("email already registered")
+		log.Println("error registering user with error email already used")
+		return helper.ErrEmailAlreadyUsed
 	}
 
-	auth.Password, err = utils.Hash(auth.Password)
+	req.Password, err = utils.Hash(req.Password)
 	if err != nil {
 		log.Println("error when try to hash password with error", err.Error())
 		return
 	}
+
+	auth := NewAuth(req.Email, req.Password, req.Fullname)
 
 	err = s.repo.registerUser(auth)
 	if err != nil {
@@ -47,4 +54,4 @@ func (s service) createUser(auth Auth) (err error) {
 	}
 
 	return
-}
+}	
