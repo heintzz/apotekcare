@@ -19,7 +19,7 @@ func newHandler(svc service) handler {
 	}
 }
 
-func (h handler) registerUserHandler(w http.ResponseWriter, r *http.Request) {
+func (h handler) registerHandler(w http.ResponseWriter, r *http.Request) {
     bodyBytes, err := io.ReadAll(r.Body)
     if err != nil {
         resp := helper.APIResponse{
@@ -131,7 +131,7 @@ func (h handler) registerUserHandler(w http.ResponseWriter, r *http.Request) {
     resp.WriteJsonResponse(w)
 }
 
-func (h handler) loginUserHandler(w http.ResponseWriter, r *http.Request) {
+func (h handler) loginHandler(w http.ResponseWriter, r *http.Request) {
 	var req loginRequest
 
 	err := json.NewDecoder(r.Body).Decode(&req)

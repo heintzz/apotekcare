@@ -12,8 +12,9 @@ func Run(router chi.Router, db *sql.DB) {
 	handler := newHandler(svc)
 
 	router.Route("/v1/auth", func(r chi.Router) {
-		r.Post("/register/user", handler.registerUserHandler)		
-		r.Post("/login/user", handler.loginUserHandler)		
+		r.Post("/register/user", handler.registerHandler)		
+		r.Post("/register/merchant", handler.registerHandler)		
+		r.Post("/login/user", handler.loginHandler)		
 	})
 }
 
