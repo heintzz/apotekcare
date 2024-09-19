@@ -1,27 +1,44 @@
 package auth
 
 import (
+	"fmt"
 	"heintzz/ecommerce/internal/helper"
 	"regexp"
 )
 
+type RegisterRequest interface {
+	Validate() error
+	GetEmail() string
+	GetPassword() string
+	GetRole() string
+}
+
 type registerRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+	Role 		 string `json:"role"`
+}
+
+type registerRequestUser struct {
+	registerRequest
 	Fullname string `json:"fullname"`
 }
 
-func (req registerRequest) Validate() error {
-	if err := req.ValidateEmail(); err != nil {
-		return err
-	}
-	if err := req.ValidatePassword(); err != nil {
-		return err
-	}
-	if err := req.ValidateFullname(); err != nil {
-		return err
-	}
-	return nil
+type registerRequestMerchant struct {
+	registerRequest
+	Name string 		`json:"merchant_name"`
+	Address string  `json:"merchant_address"`
+}
+
+// GLOBAL
+func (req registerRequest) GetEmail() string {
+	return req.Email
+}
+func (req registerRequest) GetPassword() string {
+	return req.Password
+}
+func (req registerRequest) GetRole() string {
+	return req.Role
 }
 
 func (req registerRequest) ValidateEmail() error {
@@ -47,9 +64,54 @@ func (req registerRequest) ValidatePassword() error {
 	return nil
 }
 
-func (req registerRequest) ValidateFullname() error {
+// USER VALIDATION
+func (req registerRequestUser) ValidateFullname() error {
 	if req.Fullname == "" {
 		return helper.ErrFullnameRequired
+	}
+	return nil
+}
+
+func (req registerRequestUser) Validate() error {
+	if err := req.ValidateEmail(); err != nil {
+		return err
+	}
+	if err := req.ValidatePassword(); err != nil {
+		return err
+	}
+	if err := req.ValidateFullname(); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MERCHANT VALIDATION
+func (req registerRequestMerchant) ValidateMerchantName() error {
+	if req.Name == "" {
+		return fmt.Errorf("name is required")
+	}
+	return nil
+}
+
+func (req registerRequestMerchant) ValidateMerchantAddress() error {
+	if req.Address == "" {
+		return fmt.Errorf("address is required")
+	}
+	return nil
+}
+
+func (req registerRequestMerchant) Validate() error {
+	if err := req.ValidateEmail(); err != nil {
+		return err
+	}
+	if err := req.ValidatePassword(); err != nil {
+		return err
+	}
+	if err := req.ValidateMerchantName(); err != nil {
+		return err
+	}
+	if err := req.ValidateMerchantAddress(); err != nil {
+		return err
 	}
 	return nil
 }

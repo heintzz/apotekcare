@@ -1,8 +1,11 @@
 package auth
 
 import (
+	"bytes"
 	"encoding/json"
 	"heintzz/ecommerce/internal/helper"
+	"io"
+	"log"
 	"net/http"
 )
 
@@ -17,45 +20,115 @@ func newHandler(svc service) handler {
 }
 
 func (h handler) registerUserHandler(w http.ResponseWriter, r *http.Request) {
-	var req registerRequest
+    bodyBytes, err := io.ReadAll(r.Body)
+    if err != nil {
+        resp := helper.APIResponse{
+            HttpCode: http.StatusBadRequest,
+            Success:  false,
+            Message:  "bad request",
+            Error:    err.Error(),
+        }
+        resp.WriteJsonResponse(w)
+        return
+    }
+		r.Body.Close()
 
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		resp := helper.APIResponse{
-			HttpCode: http.StatusBadRequest,
-			Success:  false,
-			Message: "bad request",
-			Error:   err.Error(),			
-		}
+		r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
-		resp.WriteJsonResponse(w)
-		return
-	}
+		var req registerRequest
+    err = json.Unmarshal(bodyBytes, &req)
+    if err != nil {
+        resp := helper.APIResponse{
+            HttpCode: http.StatusBadRequest,
+            Success:  false,
+            Message:  "bad request",
+            Error:    err.Error(),
+        }
+        resp.WriteJsonResponse(w)
+        return
+    }
+    
+    switch req.Role {
+    case "merchant":
+        var merchantReq registerRequestMerchant        
+        err = json.Unmarshal(bodyBytes, &merchantReq)
+        if err != nil {
+            resp := helper.APIResponse{
+                HttpCode: http.StatusBadRequest,
+                Success:  false,
+                Message:  "bad request",
+                Error:    err.Error(),
+            }
+            resp.WriteJsonResponse(w)
+            return
+        }
 
-	err = h.svc.createUser(req)
-	if err != nil {
-		errors, ok := helper.ErrorMapping[err.Error()]
-		if !ok {
-			errors = helper.ErrorGeneral
-		}
-		resp := helper.APIResponse{
-			HttpCode: errors.HttpCode,
-			Success: false,
-			Message: errors.ErrorMessage(),
-			Error:   err.Error(),
-			ErrorCode: errors.Code,
-		}
+        err = h.svc.createUser(merchantReq)
+        if err != nil {
+            errors, ok := helper.ErrorMapping[err.Error()]
+            if !ok {
+                errors = helper.ErrorGeneral
+            }
+            resp := helper.APIResponse{
+                HttpCode:  errors.HttpCode,
+                Success:   false,
+                Message:   errors.ErrorMessage(),
+                Error:     err.Error(),
+                ErrorCode: errors.Code,
+            }
+            resp.WriteJsonResponse(w)
+            return
+        }
 
-		resp.WriteJsonResponse(w)
-		return
-	}
+    case "user", "": 
+				log.Print("hai")
+        var userReq registerRequestUser
+        err = json.Unmarshal(bodyBytes, &userReq)
+        if err != nil {						
+            resp := helper.APIResponse{
+                HttpCode: http.StatusBadRequest,
+                Success:  false,
+                Message:  "bad request",
+                Error:    err.Error(),
+            }
+            resp.WriteJsonResponse(w)
+            return
+        }
+        
+        err = h.svc.createUser(userReq)
+        if err != nil {
+            errors, ok := helper.ErrorMapping[err.Error()]
+            if !ok {
+                errors = helper.ErrorGeneral
+            }
+            resp := helper.APIResponse{
+                HttpCode:  errors.HttpCode,
+                Success:   false,
+                Message:   errors.ErrorMessage(),
+                Error:     err.Error(),
+                ErrorCode: errors.Code,
+            }
+            resp.WriteJsonResponse(w)
+            return
+        }
 
-	resp := helper.APIResponse{
-		HttpCode: http.StatusOK,
-		Success:  true,	
-		Message: "registration success",
-	}
-	resp.WriteJsonResponse(w)
+    default:
+        resp := helper.APIResponse{
+            HttpCode: http.StatusBadRequest,
+            Success:  false,
+            Message:  "invalid role",
+            Error:    "role should be 'user' or 'merchant'",
+        }
+        resp.WriteJsonResponse(w)
+        return
+    }
+   
+    resp := helper.APIResponse{
+        HttpCode: http.StatusOK,
+        Success:  true,
+        Message:  "registration success",
+    }
+    resp.WriteJsonResponse(w)
 }
 
 func (h handler) loginUserHandler(w http.ResponseWriter, r *http.Request) {

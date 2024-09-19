@@ -11,6 +11,8 @@ import (
 type repositoryContract interface {
 	registerUser(auth Auth) (err error)
 	getByEmail(email string) (auth Auth, err error)
+	insertToUsersTable(email, fullname string) (err error)
+	insertToMerchantsTable(email, name, address string) (err error)
 }
 
 type service struct {
@@ -23,13 +25,13 @@ func newService(repo repositoryContract) service {
 	}
 }
 
-func (s service) createUser(req registerRequest) (err error) {
+func (s service) createUser(req RegisterRequest) (err error) {
 	err = req.Validate()
 	if err != nil {
 		return
 	}
 
-	existingAuth, err := s.repo.getByEmail(req.Email)
+	existingAuth, err := s.repo.getByEmail(req.GetEmail())
 	if err != nil && err != sql.ErrNoRows { 
 		log.Println("error when trying to check if email exists", err.Error())
 		return
@@ -40,18 +42,33 @@ func (s service) createUser(req registerRequest) (err error) {
 		return helper.ErrEmailAlreadyUsed
 	}
 
-	req.Password, err = utils.Hash(req.Password)
+	hashedPassword, err := utils.Hash(req.GetPassword())
 	if err != nil {
 		log.Println("error when try to hash password with error", err.Error())
 		return
 	}
 
-	auth := NewAuth(req.Email, req.Password, req.Fullname)
+	var role string
+	if req.GetRole() == "" {
+		role = "user"
+	} else {
+		role = req.GetRole()
+	}
+
+	auth := NewAuth(req.GetEmail(), hashedPassword, role)
 
 	err = s.repo.registerUser(auth)
 	if err != nil {
 		log.Println("error when try to create user with error", err.Error())
 		return
+	}
+
+	if role == "user" {
+		request := req.(registerRequestUser)
+		return s.repo.insertToUsersTable(request.Email, request.Fullname)
+	} else if role == "merchant" {
+		request := req.(registerRequestMerchant)
+		return s.repo.insertToMerchantsTable(request.Email, request.Name, request.Address)
 	}
 
 	return

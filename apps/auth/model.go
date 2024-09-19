@@ -7,17 +7,26 @@ type Auth struct {
 	Email     string
 	Password  string
 	Role      string
-	Fullname 	string
 	CreatedAt time.Time
 	UpdateAt 	time.Time
 }
 
-func NewAuth(email, password, fullname string) Auth {
+type User struct {
+	Id 					int
+	Email 			string
+	FullName 		string
+	Address 		string
+	Gender 			string
+	PhoneNumber string
+	CreatedAt 	time.Time
+	UpdateAt 		time.Time
+}
+
+func NewAuth(email, password, role string) Auth {
 	return Auth{
 		Email: email,
-		Password: password,
-		Fullname: fullname,
-		Role: "user",
+		Password: password,		
+		Role: role,
 		CreatedAt: time.Now(),
 		UpdateAt: time.Now(),
 	}
