@@ -11,17 +11,6 @@ type Auth struct {
 	UpdateAt 	time.Time
 }
 
-type User struct {
-	Id 					int
-	Email 			string
-	FullName 		string
-	Address 		string
-	Gender 			string
-	PhoneNumber string
-	CreatedAt 	time.Time
-	UpdateAt 		time.Time
-}
-
 func NewAuth(email, password, role string) Auth {
 	return Auth{
 		Email: email,

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"heintzz/ecommerce/internal/helper"
 	"io"
-	"log"
 	"net/http"
 )
 
@@ -80,8 +79,7 @@ func (h handler) registerHandler(w http.ResponseWriter, r *http.Request) {
             return
         }
 
-    case "user", "": 
-				log.Print("hai")
+    case "user", "": 				
         var userReq registerRequestUser
         err = json.Unmarshal(bodyBytes, &userReq)
         if err != nil {						

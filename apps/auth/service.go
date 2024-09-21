@@ -99,7 +99,7 @@ func (s service) loginUser(req loginRequest) (token string, err error) {
 		return
 	}
 
-	tokenJWT := utils.NewJWT(auth.Id, auth.Role)
+	tokenJWT := utils.NewJWT(auth.Email, auth.Role)
 	token, err = tokenJWT.GenerateToken()
 	if err != nil {
 		log.Println("error when try to GenerateToken with error", err.Error())
