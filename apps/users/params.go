@@ -1,6 +1,8 @@
 package users
 
-import "errors"
+import (
+	"heintzz/ecommerce/internal/helper"
+)
 
 type editProfileRequest struct {
 	Fullname    string `json:"fullname"`
@@ -21,28 +23,34 @@ type userProfileResponse struct {
 
 func (req editProfileRequest) ValidateFullname() error {
 	if req.Fullname == "" {
-		return errors.New("fullname is required")
+		return helper.ErrFullnameRequired
+	} 
+	if len(req.Fullname) < 3 {
+		return helper.ErrFullnameInvalid
 	}
 	return nil
 }
 
 func (req editProfileRequest) ValidateGender() error {
 	if req.Gender == "" {
-		return errors.New("gender is required")
+		return helper.ErrUserGenderRequired
 	}
 	return nil
 }
 
 func (req editProfileRequest) ValidateAddress() error {
 	if req.Address == "" {
-		return errors.New("address is required")
+		return helper.ErrUserAddressRequired
+	} 
+	if len(req.Address) < 3 {
+		return helper.ErrUserAddressInvalid
 	}
 	return nil
 }
 
 func (req editProfileRequest) ValaidatePhoneNumber() error {
 	if req.PhoneNumber == "" {
-		return errors.New("phone number is required")
+		return helper.ErrUserPhoneNumberRequired
 	}
 	return nil
 }

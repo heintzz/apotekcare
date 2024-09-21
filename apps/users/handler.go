@@ -77,4 +77,11 @@ func (h handler) updateProfileHandler(w http.ResponseWriter, r *http.Request) {
 		resp.WriteJsonResponse(w)
 		return
 	}
+
+	 resp := helper.APIResponse{
+		HttpCode: http.StatusOK,
+		Message: "SUCCESS",
+	 }
+
+	 resp.WriteJsonResponse(w)
 }

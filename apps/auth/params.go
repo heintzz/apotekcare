@@ -68,7 +68,7 @@ func (req registerRequest) ValidatePassword() error {
 func (req registerRequestUser) ValidateFullname() error {
 	if req.Fullname == "" {
 		return helper.ErrFullnameRequired
-	}
+	} 
 	return nil
 }
 
