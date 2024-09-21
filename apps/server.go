@@ -3,6 +3,8 @@ package apps
 import (
 	"database/sql"
 	"heintzz/ecommerce/apps/auth"
+	"heintzz/ecommerce/apps/users"
+	"heintzz/ecommerce/internal/middleware"
 	"log"
 	"net/http"
 
@@ -11,12 +13,14 @@ import (
 
 func registerRoute(router chi.Router, db *sql.DB) {
 	auth.Run(router, db)
+	users.Run(router, db)
 }
 
 
 func RunServer(appPort string, db *sql.DB) {
 	router := chi.NewRouter()
 
+	router.Use(middleware.Tracer)
 	registerRoute(router, db)
 
 	log.Println("Server running at port", appPort)
