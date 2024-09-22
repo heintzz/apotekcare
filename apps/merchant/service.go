@@ -24,13 +24,7 @@ func (s service) editMerchant(ctx context.Context, req editMerchantRequest) (err
 		return
 	}
 
-	merchant := Merchant{
-		Name: req.Name,
-		ImageUrl: req.ImageUrl,
-		City: req.City,
-		Address: req.Address,
-	} 
-
+	merchant := NewMerchant(req.Name, req.ImageUrl, req.City, req.Address)
 	err = s.repo.updateMerchantProfile(ctx, merchant)
 	if err != nil {
 		log.Println("[editMerchant, updateMerchantProfile] error :", err)
