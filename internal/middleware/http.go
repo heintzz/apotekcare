@@ -63,8 +63,22 @@ func CheckToken(h http.Handler) http.Handler {
 		}
 
 		ctx := context.WithValue(r.Context(), "AUTH_EMAIL", token.Email)		
+		ctx = context.WithValue(ctx, "AUTH_ROLE", token.Role)
 		r = r.WithContext(ctx)
 
+		h.ServeHTTP(w, r)
+	})
+}
+
+func VerifyMerchantRole(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {			
+		role, ok := r.Context().Value("AUTH_ROLE").(string)
+					
+		if !ok || role != "merchant" {
+				http.Error(w, "Forbidden: You don't have access to this resource", http.StatusForbidden)
+				return
+		}
+					
 		h.ServeHTTP(w, r)
 	})
 }
