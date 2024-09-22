@@ -3,7 +3,6 @@ package products
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"heintzz/ecommerce/internal/constants"
 )
 
@@ -33,9 +32,7 @@ func (r repository) addNewProduct(ctx context.Context, product Product) (err err
 		return err 
 	}
 
-	product.MerchantId = merchantID
-
-	fmt.Printf("merchant id: %d", product.MerchantId)
+	product.MerchantId = merchantID	
 	
 	insertQuery := `
 		INSERT INTO products (name, image_url, price, stock, description, category_id, merchant_id) 
