@@ -26,10 +26,11 @@ var (
 	ErrUserAddressInvalid	     = errors.New("address must be at least 3 characters long")
 	ErrUserPhoneNumberRequired = errors.New("phone number is required")
 
-	ErrMerchantNameRequired	   = errors.New("merchant name is required")
-	ErrMerchantNameInvalid     = errors.New("merchant name is invalid")
-	ErrMerchantAddressRequired = errors.New("merchant address is required")
-	ErrMerchantCityRequired	   = errors.New("merchant city is required")
+	ErrMerchantNameRequired	    = errors.New("merchant name is required")
+	ErrMerchantNameInvalid      = errors.New("merchant name is invalid")
+	ErrMerchantAddressRequired  = errors.New("merchant address is required")
+	ErrMerchantCityRequired	    = errors.New("merchant city is required")
+	ErrMerchantImageUrlRequired	= errors.New("merchant image is required")
 )
 
 type Error struct {
@@ -66,9 +67,10 @@ var (
 	ErrorUserPhoneNumberRequired  = NewError(ErrBadRequest.Error(), ErrUserPhoneNumberRequired.Error(), "40010", http.StatusBadRequest)	
 	
 	ErrorMerchantNameRequired  		= NewError(ErrBadRequest.Error(), ErrMerchantNameRequired.Error(), "40011", http.StatusBadRequest)
-	ErrorMerchantNameInvalid   		= NewError(ErrBadRequest.Error(), ErrMerchantNameInvalid.Error(), "400012", http.StatusBadRequest)
+	ErrorMerchantNameInvalid   		= NewError(ErrBadRequest.Error(), ErrMerchantNameInvalid.Error(), "40012", http.StatusBadRequest)
 	ErrorMerchantAddressRequired  = NewError(ErrBadRequest.Error(), ErrMerchantAddressRequired.Error(), "40013", http.StatusBadRequest)
-	ErrorMerchantCityRequired  		= NewError(ErrBadRequest.Error(), ErrMerchantCityRequired.Error(), "400014", http.StatusBadRequest)
+	ErrorMerchantCityRequired  		= NewError(ErrBadRequest.Error(), ErrMerchantCityRequired.Error(), "40014", http.StatusBadRequest)
+	ErrorMerchantImageUrlRequired	= NewError(ErrBadRequest.Error(), ErrMerchantImageUrlRequired.Error(), "40014", http.StatusBadRequest)
 	
 	ErrorEmailAlreadyUsed = NewError("duplicate entry", ErrEmailAlreadyUsed.Error(), "40901", http.StatusConflict)
 	ErrorGeneral          = NewError("internal server error", "unknown error", "99999", http.StatusInternalServerError)
@@ -91,6 +93,7 @@ var (
 		ErrMerchantNameInvalid.Error():	 		  ErrorMerchantNameInvalid,
 		ErrMerchantAddressRequired.Error():	  ErrorMerchantAddressRequired,
 		ErrMerchantCityRequired.Error():			ErrorMerchantCityRequired,
+		ErrMerchantImageUrlRequired.Error():	ErrorMerchantImageUrlRequired,
 	}
 )
 
