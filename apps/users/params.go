@@ -12,12 +12,12 @@ type editProfileRequest struct {
 }
 
 type userProfileResponse struct {
-	Id         	int    
-	Email      	string 
-	FullName   	string 
-	Gender     	string 
-	Address    	string 
-	PhoneNumber string 
+	Id         	int    `json:"id"`
+	Email      	string `json:"email"`
+	FullName   	string `json:"fullname"`
+	Gender     	string `json:"gender"`
+	Address    	string `json:"address"`
+	PhoneNumber string `json:"phone_number"`
 }
 
 
