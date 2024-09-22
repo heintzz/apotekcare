@@ -77,7 +77,13 @@ func VerifyRole(allowedRoles ...string) func(h http.Handler) http.Handler {
 			role, ok := r.Context().Value("AUTH_ROLE").(string)
 						
 			if !ok {
-				http.Error(w, "Forbidden: Role not found", http.StatusForbidden)
+				resp := helper.APIResponse{
+					HttpCode: http.StatusForbidden,
+					Success:  false,
+					Message:  "status forbidden",
+					Error:    "invalid role",
+				}
+      	resp.WriteJsonResponse(w)			
 				return
 			}
 
@@ -88,7 +94,13 @@ func VerifyRole(allowedRoles ...string) func(h http.Handler) http.Handler {
 				}
 			}
 	
-			http.Error(w, "Forbidden: You don't have access to this resource", http.StatusForbidden)
+			resp := helper.APIResponse{
+				HttpCode: http.StatusForbidden,
+				Success:  false,
+				Message:  "status forbidden",
+				Error:    "you don't have access to this resource",
+			}
+      resp.WriteJsonResponse(w)			
 		})
 	}
 }
