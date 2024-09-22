@@ -105,5 +105,6 @@ func (s service) loginUser(req loginRequest) (token string, err error) {
 		log.Println("error when try to GenerateToken with error", err.Error())
 		return
 	}
+	
 	return
 }

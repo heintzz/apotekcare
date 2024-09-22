@@ -163,7 +163,7 @@ func (h handler) loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-		resp := helper.APIResponse{
+	resp := helper.APIResponse{
 		HttpCode: http.StatusOK,
 		Success:  true,	
 		Message: "login success",
