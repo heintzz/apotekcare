@@ -15,6 +15,7 @@ func Run(router chi.Router, db *sql.DB) {
 	router.Route("/v1/user", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.CheckToken)
+			r.Use(middleware.VerifyRole("user"))
 			r.Get("/profile", handler.getProfileHandler)
 			r.Put("/profile", handler.updateProfileHandler)
 		})		

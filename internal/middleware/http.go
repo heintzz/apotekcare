@@ -70,15 +70,25 @@ func CheckToken(h http.Handler) http.Handler {
 	})
 }
 
-func VerifyMerchantRole(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {			
-		role, ok := r.Context().Value("AUTH_ROLE").(string)
-					
-		if !ok || role != "merchant" {
-				http.Error(w, "Forbidden: You don't have access to this resource", http.StatusForbidden)
+
+func VerifyRole(allowedRoles ...string) func(h http.Handler) http.Handler {
+	return func(h http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {			
+			role, ok := r.Context().Value("AUTH_ROLE").(string)
+						
+			if !ok {
+				http.Error(w, "Forbidden: Role not found", http.StatusForbidden)
 				return
-		}
-					
-		h.ServeHTTP(w, r)
-	})
+			}
+
+			for _, allowedRole := range allowedRoles {
+				if role == allowedRole {
+					h.ServeHTTP(w, r)
+					return
+				}
+			}
+	
+			http.Error(w, "Forbidden: You don't have access to this resource", http.StatusForbidden)
+		})
+	}
 }

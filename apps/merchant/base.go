@@ -15,7 +15,7 @@ func Run(router chi.Router, db *sql.DB) {
 	router.Route("/v1/merchant", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.CheckToken)
-			r.Use(middleware.VerifyMerchantRole)
+			r.Use(middleware.VerifyRole("merchant"))
 			r.Put("/profile", handler.editMerchantHandler)		
 		})
 	})
