@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"heintzz/ecommerce/internal/constants"
 	"heintzz/ecommerce/internal/helper"
 	"heintzz/ecommerce/internal/utils"
 	"log"
@@ -62,8 +63,8 @@ func CheckToken(h http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "AUTH_EMAIL", token.Email)		
-		ctx = context.WithValue(ctx, "AUTH_ROLE", token.Role)
+		ctx := context.WithValue(r.Context(), constants.AUTH_EMAIL, token.Email)		
+		ctx = context.WithValue(ctx, constants.AUTH_ROLE, token.Role)
 		r = r.WithContext(ctx)
 
 		h.ServeHTTP(w, r)
@@ -74,7 +75,7 @@ func CheckToken(h http.Handler) http.Handler {
 func VerifyRole(allowedRoles ...string) func(h http.Handler) http.Handler {
 	return func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {			
-			role, ok := r.Context().Value("AUTH_ROLE").(string)
+			role, ok := r.Context().Value(constants.AUTH_ROLE).(string)
 						
 			if !ok {
 				resp := helper.APIResponse{

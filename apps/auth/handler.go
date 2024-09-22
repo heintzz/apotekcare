@@ -3,6 +3,7 @@ package auth
 import (
 	"bytes"
 	"encoding/json"
+	"heintzz/ecommerce/internal/constants"
 	"heintzz/ecommerce/internal/helper"
 	"io"
 	"net/http"
@@ -48,7 +49,7 @@ func (h handler) registerHandler(w http.ResponseWriter, r *http.Request) {
     }
     
     switch req.Role {
-    case "merchant":
+    case constants.ROLE_MERCHANT:
         var merchantReq registerRequestMerchant        
         err = json.Unmarshal(bodyBytes, &merchantReq)
         if err != nil {
@@ -79,7 +80,7 @@ func (h handler) registerHandler(w http.ResponseWriter, r *http.Request) {
             return
         }
 
-    case "user", "": 				
+    case constants.ROLE_USER, "": 				
         var userReq registerRequestUser
         err = json.Unmarshal(bodyBytes, &userReq)
         if err != nil {						

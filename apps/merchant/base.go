@@ -2,6 +2,7 @@ package merchant
 
 import (
 	"database/sql"
+	"heintzz/ecommerce/internal/constants"
 	"heintzz/ecommerce/internal/middleware"
 
 	"github.com/go-chi/chi/v5"
@@ -15,7 +16,7 @@ func Run(router chi.Router, db *sql.DB) {
 	router.Route("/v1/merchant", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.CheckToken)
-			r.Use(middleware.VerifyRole("merchant"))
+			r.Use(middleware.VerifyRole(constants.ROLE_MERCHANT))
 			r.Put("/profile", handler.editMerchantHandler)		
 		})
 	})

@@ -2,6 +2,7 @@ package users
 
 import (
 	"database/sql"
+	"heintzz/ecommerce/internal/constants"
 	"heintzz/ecommerce/internal/middleware"
 
 	"github.com/go-chi/chi/v5"
@@ -15,7 +16,7 @@ func Run(router chi.Router, db *sql.DB) {
 	router.Route("/v1/user", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.CheckToken)
-			r.Use(middleware.VerifyRole("user"))
+			r.Use(middleware.VerifyRole(constants.ROLE_USER))
 			r.Get("/profile", handler.getProfileHandler)
 			r.Put("/profile", handler.updateProfileHandler)
 		})		

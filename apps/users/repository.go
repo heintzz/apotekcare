@@ -3,6 +3,7 @@ package users
 import (
 	"context"
 	"database/sql"
+	"heintzz/ecommerce/internal/constants"
 )
 
 type repository struct {
@@ -16,7 +17,7 @@ func newRepository(db *sql.DB) repository {
 }
 
 func (r repository) fetchProfile(ctx context.Context) (user User, err error) {
-	email := ctx.Value("AUTH_EMAIL")
+	email := ctx.Value("_EMAIL")
 	query := `
 		SELECT id, email, full_name, gender, address, phone_number, created_at, updated_at
 		FROM
@@ -38,7 +39,7 @@ func (r repository) fetchProfile(ctx context.Context) (user User, err error) {
 }
 
 func (r repository) updateProfile(ctx context.Context, user User) (err error) {
-	email := ctx.Value("AUTH_EMAIL")
+	email := ctx.Value(constants.AUTH_EMAIL)
 	query := `
 		UPDATE users
 		SET 

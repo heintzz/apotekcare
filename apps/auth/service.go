@@ -3,6 +3,7 @@ package auth
 import (
 	"database/sql"
 	"fmt"
+	"heintzz/ecommerce/internal/constants"
 	"heintzz/ecommerce/internal/helper"
 	"heintzz/ecommerce/internal/utils"
 	"log"
@@ -63,10 +64,10 @@ func (s service) createUser(req RegisterRequest) (err error) {
 		return
 	}
 
-	if role == "user" {
+	if role == constants.ROLE_USER {
 		request := req.(registerRequestUser)
 		return s.repo.insertToUsersTable(request.Email, request.Fullname)
-	} else if role == "merchant" {
+	} else if role == constants.ROLE_MERCHANT {
 		request := req.(registerRequestMerchant)
 		return s.repo.insertToMerchantsTable(request.Email, request.Name, request.Address)
 	}
