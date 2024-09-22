@@ -33,6 +33,13 @@ var (
 	ErrMerchantImageUrlRequired	= errors.New("merchant image is required")
 
 	ErrCategoryNameRequired	= errors.New("category name is required")
+
+	ErrProductNameRequired = errors.New("product name is required")
+	ErrProductPriceInvalid = errors.New("product price is required")
+	ErrProductStockInvalid = errors.New("product stock is required")
+	ErrProductDescriptionRequired = errors.New("product description is required")
+	ErrProductCategoryIdRequired = errors.New("product category is required")
+	ErrProductImageUrlRequired = errors.New("product image url is required")
 )
 
 type Error struct {
@@ -76,6 +83,13 @@ var (
 
 	ErrorCategoryNameRequired = NewError(ErrBadRequest.Error(), ErrCategoryNameRequired.Error(), "40016", http.StatusBadRequest)
 	
+	ErrorProductNameRequired = NewError(ErrBadRequest.Error(), ErrProductNameRequired.Error(), "40016", http.StatusBadRequest)
+	ErrorProductImageUrlRequired = NewError(ErrBadRequest.Error(), ErrProductImageUrlRequired.Error(), "40016", http.StatusBadRequest)
+	ErrorProductPriceInvalid = NewError(ErrBadRequest.Error(), ErrProductPriceInvalid.Error(), "40016", http.StatusBadRequest)
+	ErrorProductStockInvalid = NewError(ErrBadRequest.Error(), ErrProductStockInvalid.Error(), "40016", http.StatusBadRequest)
+	ErrorProductDescriptionRequired = NewError(ErrBadRequest.Error(), ErrProductDescriptionRequired.Error(), "40016", http.StatusBadRequest)
+	ErrorProductCategoryIdRequired = NewError(ErrBadRequest.Error(), ErrProductCategoryIdRequired.Error(), "40016", http.StatusBadRequest)
+	
 	ErrorEmailAlreadyUsed = NewError("duplicate entry", ErrEmailAlreadyUsed.Error(), "40901", http.StatusConflict)
 	ErrorGeneral          = NewError("internal server error", "unknown error", "99999", http.StatusInternalServerError)
 )
@@ -99,6 +113,12 @@ var (
 		ErrMerchantCityRequired.Error():			ErrorMerchantCityRequired,
 		ErrMerchantImageUrlRequired.Error():	ErrorMerchantImageUrlRequired,
 		ErrCategoryNameRequired.Error(): 			ErrorCategoryNameRequired,
+		ErrProductNameRequired.Error():				ErrorProductNameRequired,
+		ErrProductImageUrlRequired.Error():		ErrorProductImageUrlRequired,
+		ErrProductPriceInvalid.Error():				ErrorProductPriceInvalid,
+		ErrProductStockInvalid.Error():				ErrorProductStockInvalid,
+		ErrProductDescriptionRequired.Error():	ErrorProductDescriptionRequired,
+		ErrProductCategoryIdRequired.Error():		ErrorProductCategoryIdRequired,
 	}
 )
 

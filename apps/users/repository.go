@@ -17,7 +17,7 @@ func newRepository(db *sql.DB) repository {
 }
 
 func (r repository) fetchProfile(ctx context.Context) (user User, err error) {
-	email := ctx.Value("_EMAIL")
+	email := ctx.Value(constants.AUTH_EMAIL)
 	query := `
 		SELECT id, email, full_name, gender, address, phone_number, created_at, updated_at
 		FROM
@@ -34,7 +34,6 @@ func (r repository) fetchProfile(ctx context.Context) (user User, err error) {
 	if err != nil {
 		return
 	}
-
 	return
 }
 

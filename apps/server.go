@@ -5,6 +5,7 @@ import (
 	"heintzz/ecommerce/apps/auth"
 	"heintzz/ecommerce/apps/categories"
 	"heintzz/ecommerce/apps/merchant"
+	"heintzz/ecommerce/apps/products"
 	"heintzz/ecommerce/apps/users"
 	"heintzz/ecommerce/internal/middleware"
 	"log"
@@ -18,6 +19,7 @@ func registerRoute(router chi.Router, db *sql.DB) {
 	users.Run(router, db)
 	merchant.Run(router, db)
 	categories.Run(router, db)
+	products.Run(router, db)
 }
 
 

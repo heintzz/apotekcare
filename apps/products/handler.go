@@ -1,4 +1,4 @@
-package merchant
+package products
 
 import (
 	"encoding/json"
@@ -16,9 +16,9 @@ func newHandler(svc service) handler {
 	}
 }
 
-func (h handler) editMerchantHandler(w http.ResponseWriter, r *http.Request) {
-	var req editMerchantRequest
-
+func (h handler) addProductHandler(w http.ResponseWriter, r *http.Request) {
+	var req addProductRequest
+	
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
 		resp := helper.APIResponse{
@@ -32,7 +32,7 @@ func (h handler) editMerchantHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.svc.editMerchant(r.Context(), req)	
+	err = h.svc.addProduct(r.Context(), req)
 	if err != nil {
 		errors, ok := helper.ErrorMapping[err.Error()]
 		if !ok {
@@ -51,7 +51,7 @@ func (h handler) editMerchantHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp := helper.APIResponse{
-		HttpCode: http.StatusOK,
+		HttpCode: http.StatusCreated,
 		Message: "SUCCESS",
 	}
 
