@@ -31,6 +31,8 @@ var (
 	ErrMerchantAddressRequired  = errors.New("merchant address is required")
 	ErrMerchantCityRequired	    = errors.New("merchant city is required")
 	ErrMerchantImageUrlRequired	= errors.New("merchant image is required")
+
+	ErrCategoryNameRequired	= errors.New("category name is required")
 )
 
 type Error struct {
@@ -70,7 +72,9 @@ var (
 	ErrorMerchantNameInvalid   		= NewError(ErrBadRequest.Error(), ErrMerchantNameInvalid.Error(), "40012", http.StatusBadRequest)
 	ErrorMerchantAddressRequired  = NewError(ErrBadRequest.Error(), ErrMerchantAddressRequired.Error(), "40013", http.StatusBadRequest)
 	ErrorMerchantCityRequired  		= NewError(ErrBadRequest.Error(), ErrMerchantCityRequired.Error(), "40014", http.StatusBadRequest)
-	ErrorMerchantImageUrlRequired	= NewError(ErrBadRequest.Error(), ErrMerchantImageUrlRequired.Error(), "40014", http.StatusBadRequest)
+	ErrorMerchantImageUrlRequired	= NewError(ErrBadRequest.Error(), ErrMerchantImageUrlRequired.Error(), "40015", http.StatusBadRequest)
+
+	ErrorCategoryNameRequired = NewError(ErrBadRequest.Error(), ErrCategoryNameRequired.Error(), "40016", http.StatusBadRequest)
 	
 	ErrorEmailAlreadyUsed = NewError("duplicate entry", ErrEmailAlreadyUsed.Error(), "40901", http.StatusConflict)
 	ErrorGeneral          = NewError("internal server error", "unknown error", "99999", http.StatusInternalServerError)
@@ -94,6 +98,7 @@ var (
 		ErrMerchantAddressRequired.Error():	  ErrorMerchantAddressRequired,
 		ErrMerchantCityRequired.Error():			ErrorMerchantCityRequired,
 		ErrMerchantImageUrlRequired.Error():	ErrorMerchantImageUrlRequired,
+		ErrCategoryNameRequired.Error(): 			ErrorCategoryNameRequired,
 	}
 )
 

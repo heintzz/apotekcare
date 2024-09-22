@@ -3,6 +3,7 @@ package apps
 import (
 	"database/sql"
 	"heintzz/ecommerce/apps/auth"
+	"heintzz/ecommerce/apps/categories"
 	"heintzz/ecommerce/apps/merchant"
 	"heintzz/ecommerce/apps/users"
 	"heintzz/ecommerce/internal/middleware"
@@ -16,6 +17,7 @@ func registerRoute(router chi.Router, db *sql.DB) {
 	auth.Run(router, db)
 	users.Run(router, db)
 	merchant.Run(router, db)
+	categories.Run(router, db)
 }
 
 
