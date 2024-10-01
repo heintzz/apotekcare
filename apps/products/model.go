@@ -15,6 +15,17 @@ type Product struct {
 	UpdatedAt   time.Time
 }
 
+type DetailProduct struct {
+	Id          int
+	Name        string	
+	Stock       int
+	Price       int
+	ImageUrl    string
+	Description string
+	Category	  categoryResponse
+	Merchant    merchantResponse
+}
+
 func NewProduct(name, image_url, description string, category_id, merchant_id, stock, price int) Product {
 	return Product{
 		Name: name,

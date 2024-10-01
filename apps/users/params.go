@@ -20,7 +20,6 @@ type userProfileResponse struct {
 	PhoneNumber string `json:"phone_number"`
 }
 
-
 func (req editProfileRequest) ValidateFullname() error {
 	if req.Fullname == "" {
 		return helper.ErrFullnameRequired
