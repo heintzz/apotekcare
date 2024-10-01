@@ -11,6 +11,29 @@ type addProductRequest struct {
 	CategoryId  int			`json:"category_id"`
 }
 
+type categoryResponse struct {
+	Id 	 int 		`json:"id"`
+	Name string `json:"name"`
+}
+
+type merchantResponse struct {
+	Id 	 int 		`json:"id"`
+	Name string `json:"name"`
+	City string `json:"city"`
+}
+
+
+type detailProductResponse struct {
+	Id         	int     `json:"id"`
+	Name      	string  `json:"name"`
+	Image     	string  `json:"image"`
+	Price       int			`json:"price"`
+	Stock       int			`json:"stock"`
+	Description string	`json:"description"`
+	Category    categoryResponse `json:"category"`
+	Merchant 		merchantResponse `json:"merchant"`
+}
+
 func (req addProductRequest) Validate() (err error) {
 	if err := req.ValidateName(); err != nil {
 		return err
@@ -71,6 +94,16 @@ func (req addProductRequest) ValidateDescription() (err error) {
 func (req addProductRequest) ValidateCategoryId() (err error) {
 	if req.CategoryId <= 0  {
 		return helper.ErrProductCategoryIdRequired
+	}
+	return nil
+}
+type getProductRequest struct {
+	Id string 
+}
+
+func (req getProductRequest) ValidateId() (err error) {
+	if req.Id == "" {
+		return helper.ErrProductIdRequired
 	}
 	return nil
 }
