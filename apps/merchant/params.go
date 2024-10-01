@@ -9,6 +9,15 @@ type editMerchantRequest struct {
 	Address  string `json:"merchant_address"`
 }
 
+type MerchantResponse struct {
+	Id 				int 	 `json:"id"`
+	Email 		string `json:"email"`
+	Name 			string `json:"name"`
+	ImageUrl 	string `json:"image_url"`
+	City 			string `json:"city"`
+	Address 	string `json:"address"`
+}
+
 func (req editMerchantRequest) Validate() (err error) {
 	if err := req.ValidateName(); err != nil {
 		return err

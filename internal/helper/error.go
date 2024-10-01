@@ -41,6 +41,10 @@ var (
 	ErrProductCategoryIdRequired = errors.New("product category is required")
 	ErrProductImageUrlRequired = errors.New("product image url is required")
 	ErrProductIdRequired = errors.New("product id is required")
+
+	// NOT FOUND
+	ErrUserNotFound = errors.New("user not found")
+	ErrMerchantNotFound = errors.New("merchant not found")
 )
 
 type Error struct {
@@ -92,6 +96,8 @@ var (
 	ErrorProductCategoryIdRequired = NewError(ErrBadRequest.Error(), ErrProductCategoryIdRequired.Error(), "40022", http.StatusBadRequest)
 	ErrorProductIdRequired = NewError(ErrBadRequest.Error(), ErrProductIdRequired.Error(), "40023", http.StatusBadRequest)
 	
+	ErrorUserNotFound 		= NewError(ErrNotFound.Error(), ErrUserNotFound.Error(), "40401", http.StatusNotFound)
+	ErrorMerchantNotFound = NewError(ErrNotFound.Error(), ErrMerchantNotFound.Error(), "40402", http.StatusNotFound)
 	ErrorEmailAlreadyUsed = NewError("duplicate entry", ErrEmailAlreadyUsed.Error(), "40901", http.StatusConflict)
 	ErrorGeneral          = NewError("internal server error", "unknown error", "99999", http.StatusInternalServerError)
 )
@@ -122,6 +128,9 @@ var (
 		ErrProductDescriptionRequired.Error():	ErrorProductDescriptionRequired,
 		ErrProductCategoryIdRequired.Error():		ErrorProductCategoryIdRequired,
 		ErrProductIdRequired.Error():						ErrorProductIdRequired,
+
+		ErrUserNotFound.Error():							ErrorUserNotFound,
+		ErrMerchantNotFound.Error():					ErrorMerchantNotFound,
 	}
 )
 

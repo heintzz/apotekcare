@@ -16,6 +16,35 @@ func newHandler(svc service) handler {
 	}
 }
 
+func (h handler) getMerchantProfile(w http.ResponseWriter, r *http.Request) {
+	merchant, err := h.svc.merchantProfile(r.Context())
+
+	if err != nil {
+		errors, ok := helper.ErrorMapping[err.Error()]
+		if !ok {
+			errors = helper.ErrorGeneral
+		}
+		resp := helper.APIResponse{
+			HttpCode: errors.HttpCode,
+			Success: false,
+			Message: errors.ErrorMessage(),
+			Error:   err.Error(),
+			ErrorCode: errors.Code,
+		}
+
+		resp.WriteJsonResponse(w)
+		return
+	}
+
+	resp := helper.APIResponse{
+		HttpCode: http.StatusOK,
+		Message: "SUCCESS",
+		Payload: merchant,
+	}
+
+	resp.WriteJsonResponse(w)
+}
+
 func (h handler) editMerchantHandler(w http.ResponseWriter, r *http.Request) {
 	var req editMerchantRequest
 

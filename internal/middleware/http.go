@@ -62,7 +62,7 @@ func CheckToken(h http.Handler) http.Handler {
 			resp.WriteJsonResponse(w)
 			return
 		}
-
+		
 		ctx := context.WithValue(r.Context(), constants.AUTH_EMAIL, token.Email)		
 		ctx = context.WithValue(ctx, constants.AUTH_ROLE, token.Role)
 		r = r.WithContext(ctx)
