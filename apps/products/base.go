@@ -15,8 +15,9 @@ func Run(router chi.Router, db *sql.DB) {
 	
 	router.Route("/v1/products", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
-			r.Use(middleware.CheckToken)
-			r.Get("/id/{id}", handler.getProductHandler)
+			r.Use(middleware.CheckToken)		
+			r.Get("/", handler.getProductsHandler)
+			r.Get("/id/{id}", handler.getDetailProductHandler)
 		})
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.CheckToken)		

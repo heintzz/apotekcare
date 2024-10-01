@@ -60,7 +60,7 @@ func (h handler) addProductHandler(w http.ResponseWriter, r *http.Request) {
 	resp.WriteJsonResponse(w)
 }
 
-func (h handler) getProductHandler(w http.ResponseWriter, r *http.Request) {
+func (h handler) getDetailProductHandler(w http.ResponseWriter, r *http.Request) {
 	var req getProductRequest
 	req.Id = chi.URLParam(r, "id")		
 	
@@ -83,32 +83,42 @@ func (h handler) getProductHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	merchant := merchantResponse{
-		Id: product.Merchant.Id,
-		Name: product.Merchant.Name,
-		City: product.Merchant.City,
+	resp := helper.APIResponse{
+		HttpCode: http.StatusOK,
+		Message: "SUCCESS",
+		Payload: product,
 	}
 
-	category := categoryResponse{
-		Id: product.Category.Id,
-		Name: product.Category.Name,
+	resp.WriteJsonResponse(w)
+}
+
+func (h handler) getProductsHandler(w http.ResponseWriter, r *http.Request) {
+	queryParams := r.URL.Query().Get("query")
+
+	products, err := h.svc.getProducts(r.Context(), queryParams)
+	if err != nil {
+		errors, ok := helper.ErrorMapping[err.Error()]
+		if !ok {
+			errors = helper.ErrorGeneral
+		}
+		resp := helper.APIResponse{
+			HttpCode: errors.HttpCode,
+			Success: false,
+			Message: errors.ErrorMessage(),
+			Error:   err.Error(),
+			ErrorCode: errors.Code,
+		}
+
+		resp.WriteJsonResponse(w)
+		return
 	}
 
 	resp := helper.APIResponse{
 		HttpCode: http.StatusOK,
 		Message: "SUCCESS",
-		Payload: detailProductResponse{
-			Id: product.Id,
-			Name: product.Name,
-			Price: product.Price,
-			Image: product.ImageUrl,
-			Stock: product.Stock,
-			Description: product.Description,
-			Merchant: merchant,
-			Category: category,
-		},
+		Payload: products,
+		Query: queryParams,
 	}
 
 	resp.WriteJsonResponse(w)
-
 }

@@ -9,6 +9,7 @@ type APIResponse struct {
 	HttpCode 	int					`json:"-"`
 	Success  	bool        `json:"success"`
 	Message	 	string      `json:"message"`
+	Query			string			`json:"query,omitempty"`
 	Error    	interface{} `json:"error,omitempty"`
 	Payload 	interface{} `json:"payload,omitempty"`
 	ErrorCode string	  	`json:"error_code,omitempty"`
