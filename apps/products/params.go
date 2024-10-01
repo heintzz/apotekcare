@@ -22,14 +22,22 @@ type merchantResponse struct {
 	City string `json:"city"`
 }
 
-
-type detailProductResponse struct {
+type DetailProduct struct {
 	Id         	int     `json:"id"`
 	Name      	string  `json:"name"`
-	Image     	string  `json:"image"`
+	ImageUrl    string  `json:"image"`
 	Price       int			`json:"price"`
 	Stock       int			`json:"stock"`
 	Description string	`json:"description"`
+	Category    categoryResponse `json:"category"`
+	Merchant 		merchantResponse `json:"merchant"`
+}
+
+type ProductResponse struct {
+	Id         	int     `json:"id"`
+	Name      	string  `json:"name"`
+	ImageUrl    string  `json:"image"`
+	Price       int			`json:"price"`		
 	Category    categoryResponse `json:"category"`
 	Merchant 		merchantResponse `json:"merchant"`
 }
