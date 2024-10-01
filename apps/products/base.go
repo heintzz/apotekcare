@@ -12,13 +12,17 @@ func Run(router chi.Router, db *sql.DB) {
 	repo := newRepository(db)
 	svc := newService(repo)
 	handler := newHandler(svc)
-
+	
 	router.Route("/v1/products", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.CheckToken)
-			r.Use(middleware.VerifyRole(constants.ROLE_MERCHANT))
-			r.Post("/", handler.addProductHandler)		
+			r.Get("/id/{id}", handler.getProductHandler)
 		})
-	})
+		r.Group(func(r chi.Router) {
+			r.Use(middleware.CheckToken)		
+			r.Use(middleware.VerifyRole(constants.ROLE_MERCHANT))
+			r.Post("/", handler.addProductHandler)					
+		})
+	})	
 }
 

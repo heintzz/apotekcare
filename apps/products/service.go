@@ -7,6 +7,7 @@ import (
 
 type repositoryContract interface {
 	addNewProduct(ctx context.Context, product Product) (err error)
+	getDetailProduct(ctx context.Context, productId string) (product DetailProduct, err error)
 }
 
 type service struct {
@@ -35,4 +36,18 @@ func (s service) addProduct(ctx context.Context, req addProductRequest) (err err
 	}
 	
 	return
+}
+
+func (s service) getProductData(ctx context.Context, req getProductRequest) (product DetailProduct, err error) {
+	if err = req.ValidateId(); err != nil {
+		return
+	}
+	
+	product, err = s.repo.getDetailProduct(ctx, req.Id)
+	if err != nil {
+		log.Println("[getProductData, getDetailProduct] error : ", err)
+		return
+	}
+
+	return product, nil	
 }
