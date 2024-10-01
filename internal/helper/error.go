@@ -40,6 +40,7 @@ var (
 	ErrProductDescriptionRequired = errors.New("product description is required")
 	ErrProductCategoryIdRequired = errors.New("product category is required")
 	ErrProductImageUrlRequired = errors.New("product image url is required")
+	ErrProductIdRequired = errors.New("product id is required")
 )
 
 type Error struct {
@@ -83,12 +84,13 @@ var (
 
 	ErrorCategoryNameRequired = NewError(ErrBadRequest.Error(), ErrCategoryNameRequired.Error(), "40016", http.StatusBadRequest)
 	
-	ErrorProductNameRequired = NewError(ErrBadRequest.Error(), ErrProductNameRequired.Error(), "40016", http.StatusBadRequest)
-	ErrorProductImageUrlRequired = NewError(ErrBadRequest.Error(), ErrProductImageUrlRequired.Error(), "40016", http.StatusBadRequest)
-	ErrorProductPriceInvalid = NewError(ErrBadRequest.Error(), ErrProductPriceInvalid.Error(), "40016", http.StatusBadRequest)
-	ErrorProductStockInvalid = NewError(ErrBadRequest.Error(), ErrProductStockInvalid.Error(), "40016", http.StatusBadRequest)
-	ErrorProductDescriptionRequired = NewError(ErrBadRequest.Error(), ErrProductDescriptionRequired.Error(), "40016", http.StatusBadRequest)
-	ErrorProductCategoryIdRequired = NewError(ErrBadRequest.Error(), ErrProductCategoryIdRequired.Error(), "40016", http.StatusBadRequest)
+	ErrorProductNameRequired = NewError(ErrBadRequest.Error(), ErrProductNameRequired.Error(), "40017", http.StatusBadRequest)
+	ErrorProductImageUrlRequired = NewError(ErrBadRequest.Error(), ErrProductImageUrlRequired.Error(), "40018", http.StatusBadRequest)
+	ErrorProductPriceInvalid = NewError(ErrBadRequest.Error(), ErrProductPriceInvalid.Error(), "40019", http.StatusBadRequest)
+	ErrorProductStockInvalid = NewError(ErrBadRequest.Error(), ErrProductStockInvalid.Error(), "40020", http.StatusBadRequest)
+	ErrorProductDescriptionRequired = NewError(ErrBadRequest.Error(), ErrProductDescriptionRequired.Error(), "40021", http.StatusBadRequest)
+	ErrorProductCategoryIdRequired = NewError(ErrBadRequest.Error(), ErrProductCategoryIdRequired.Error(), "40022", http.StatusBadRequest)
+	ErrorProductIdRequired = NewError(ErrBadRequest.Error(), ErrProductIdRequired.Error(), "40023", http.StatusBadRequest)
 	
 	ErrorEmailAlreadyUsed = NewError("duplicate entry", ErrEmailAlreadyUsed.Error(), "40901", http.StatusConflict)
 	ErrorGeneral          = NewError("internal server error", "unknown error", "99999", http.StatusInternalServerError)
@@ -119,6 +121,7 @@ var (
 		ErrProductStockInvalid.Error():				ErrorProductStockInvalid,
 		ErrProductDescriptionRequired.Error():	ErrorProductDescriptionRequired,
 		ErrProductCategoryIdRequired.Error():		ErrorProductCategoryIdRequired,
+		ErrProductIdRequired.Error():						ErrorProductIdRequired,
 	}
 )
 
