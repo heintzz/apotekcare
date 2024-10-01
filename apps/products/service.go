@@ -31,7 +31,7 @@ func (s service) getProducts(ctx context.Context, queryParams string) (productsR
 		merchant := merchantResponse{
 			Id: product.Merchant.Id,
 			Name: product.Merchant.Name,
-			// City: product.Merchant.City,
+			City: product.Merchant.City,
 		}
 
 		category := categoryResponse{
