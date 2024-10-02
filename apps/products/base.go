@@ -23,6 +23,7 @@ func Run(router chi.Router, db *sql.DB) {
 			r.Use(middleware.CheckToken)		
 			r.Use(middleware.VerifyRole(constants.ROLE_MERCHANT))
 			r.Post("/", handler.addProductHandler)					
+			r.Get("/id/{id}/merchant", handler.getDetailProductByMerchant)
 			r.Get("/merchant", handler.getProductsByMerchantHandler)					
 		})		
 	})	

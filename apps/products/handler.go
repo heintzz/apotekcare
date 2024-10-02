@@ -54,6 +54,7 @@ func (h handler) addProductHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp := helper.APIResponse{
 		HttpCode: http.StatusCreated,
+		Success: true,
 		Message: "SUCCESS",
 	}
 
@@ -64,7 +65,7 @@ func (h handler) getDetailProductHandler(w http.ResponseWriter, r *http.Request)
 	var req getProductRequest
 	req.Id = chi.URLParam(r, "id")		
 	
-	product, err := h.svc.getProductData(r.Context(), req)
+	product, err := h.svc.getProduct(r.Context(), req)
 
 	if err != nil {
 		errors, ok := helper.ErrorMapping[err.Error()]
@@ -85,7 +86,41 @@ func (h handler) getDetailProductHandler(w http.ResponseWriter, r *http.Request)
 
 	resp := helper.APIResponse{
 		HttpCode: http.StatusOK,
-		Message: "SUCCESS",
+		Success: true,
+		Message: "get product detail success",
+		Payload: product,
+	}
+
+	resp.WriteJsonResponse(w)
+}
+
+func (h handler) getDetailProductByMerchant(w http.ResponseWriter, r *http.Request) {
+	var req getProductRequest
+	req.Id = chi.URLParam(r, "id")		
+	
+	product, err := h.svc.merchantProduct(r.Context(), req)
+
+	if err != nil {
+		errors, ok := helper.ErrorMapping[err.Error()]
+		if !ok {
+			errors = helper.ErrorGeneral
+		}
+		resp := helper.APIResponse{
+			HttpCode: errors.HttpCode,
+			Success: false,
+			Message: errors.ErrorMessage(),
+			Error:   err.Error(),
+			ErrorCode: errors.Code,
+		}
+
+		resp.WriteJsonResponse(w)
+		return
+	}
+
+	resp := helper.APIResponse{
+		HttpCode: http.StatusOK,
+		Success: true,
+		Message: "get product detail success",
 		Payload: product,
 	}
 

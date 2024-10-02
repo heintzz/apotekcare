@@ -10,6 +10,7 @@ type repositoryContract interface {
 	getProducts(ctx context.Context, queryParams string) (products []ProductResponse, err error)
 	getProductsByMerchant(ctx context.Context, queryParams string) (products []ProductResponse, err error)
 	getDetailProduct(ctx context.Context, productId string) (product DetailProduct, err error)
+	getDetailProductByMerchant(ctx context.Context, productId string) (product DetailProduct, err error)
 }
 
 type service struct {
@@ -20,6 +21,24 @@ func newService(repo repositoryContract) service {
 	return service{
 		repo: repo,
 	}
+}
+
+func (s service) addProduct(ctx context.Context, req addProductRequest) (err error) {
+	if err = req.Validate(); err != nil {
+		return 
+	}
+
+	product := NewProduct(
+		req.Name, req.ImageUrl, req.Description, 
+		req.CategoryId, 0, req.Stock, req.Price,
+	)
+	err = s.repo.addNewProduct(ctx, product)
+	if err != nil {
+		log.Println("[addProduct, addNewProduct] error : ", err)
+		return
+	}
+	
+	return
 }
 
 func (s service) products(ctx context.Context, queryParams string) (productsResponse []ProductResponse, err error) {
@@ -92,25 +111,7 @@ func (s service) merchantProducts(ctx context.Context, queryParams string) (prod
 	return
 }
 
-func (s service) addProduct(ctx context.Context, req addProductRequest) (err error) {
-	if err = req.Validate(); err != nil {
-		return 
-	}
-
-	product := NewProduct(
-		req.Name, req.ImageUrl, req.Description, 
-		req.CategoryId, 0, req.Stock, req.Price,
-	)
-	err = s.repo.addNewProduct(ctx, product)
-	if err != nil {
-		log.Println("[addProduct, addNewProduct] error : ", err)
-		return
-	}
-	
-	return
-}
-
-func (s service) getProductData(ctx context.Context, req getProductRequest) (product DetailProduct, err error) {
+func (s service) getProduct(ctx context.Context, req getProductRequest) (product DetailProduct, err error) {
 	if err = req.ValidateId(); err != nil {
 		return
 	}
@@ -146,3 +147,38 @@ func (s service) getProductData(ctx context.Context, req getProductRequest) (pro
 	return 
 }
 
+func (s service) merchantProduct(ctx context.Context, req getProductRequest) (product DetailProduct, err error) {
+	if err = req.ValidateId(); err != nil {
+		return
+	}
+	
+	product, err = s.repo.getDetailProductByMerchant(ctx, req.Id)
+	if err != nil {
+		log.Println("[getProductData, getDetailProduct] error : ", err)
+		return
+	}
+
+	merchant := merchantResponse{
+		Id: product.Merchant.Id,
+		Name: product.Merchant.Name,
+		City: product.Merchant.City,
+	}
+
+	category := categoryResponse{
+		Id: product.Category.Id,
+		Name: product.Category.Name,
+	}
+
+	product = DetailProduct{
+		Id: product.Id,
+		Name: product.Name,
+		Price: product.Price,
+		ImageUrl: product.ImageUrl,
+		Stock: product.Stock,
+		Description: product.Description,
+		Merchant: merchant,
+		Category: category,
+	}
+
+	return 
+}
