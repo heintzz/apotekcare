@@ -88,7 +88,7 @@ func (h handler) getCategoriesHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp := helper.APIResponse{
 		HttpCode: http.StatusOK,
-		Message: "SUCCESS",
+		Message: "get categories success",
 		Payload: data,
 	}
 
