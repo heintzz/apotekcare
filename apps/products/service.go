@@ -7,7 +7,8 @@ import (
 
 type repositoryContract interface {
 	addNewProduct(ctx context.Context, product Product) (err error)
-	getProductsLogic(ctx context.Context, queryParams string) (products []ProductResponse, err error)
+	getProducts(ctx context.Context, queryParams string) (products []ProductResponse, err error)
+	getProductsByMerchant(ctx context.Context, queryParams string) (products []ProductResponse, err error)
 	getDetailProduct(ctx context.Context, productId string) (product DetailProduct, err error)
 }
 
@@ -21,10 +22,47 @@ func newService(repo repositoryContract) service {
 	}
 }
 
-func (s service) getProducts(ctx context.Context, queryParams string) (productsResponse []ProductResponse, err error) {
-	products, err := s.repo.getProductsLogic(ctx, queryParams)
+func (s service) products(ctx context.Context, queryParams string) (productsResponse []ProductResponse, err error) {
+	products, err := s.repo.getProducts(ctx, queryParams)
 	if err != nil {
 		return
+	}
+
+	for _, product := range products {		
+		merchant := merchantResponse{
+			Id: product.Merchant.Id,
+			Name: product.Merchant.Name,
+			City: product.Merchant.City,
+		}
+
+		category := categoryResponse{
+			Id: product.Category.Id,
+			Name: product.Category.Name,
+		}
+
+		product := ProductResponse{
+			Id: product.Id,
+			Name: product.Name,
+			Price: product.Price,
+			ImageUrl: product.ImageUrl,			
+			Merchant: merchant,
+			Category: category,
+		}
+
+		productsResponse = append(productsResponse, product)
+	}
+
+	return
+}
+
+func (s service) merchantProducts(ctx context.Context, queryParams string) (productsResponse []ProductResponse, err error) {
+	products, err := s.repo.getProductsByMerchant(ctx, queryParams)
+	if err != nil {
+		return
+	}
+
+	if len(products) == 0 {
+		return []ProductResponse{}, nil
 	}
 
 	for _, product := range products {		
@@ -107,3 +145,4 @@ func (s service) getProductData(ctx context.Context, req getProductRequest) (pro
 
 	return 
 }
+

@@ -3,7 +3,6 @@ package products
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"heintzz/ecommerce/internal/constants"
 )
 
@@ -17,9 +16,9 @@ func newRepository(db *sql.DB) repository {
 	}
 }
 
-func (r repository) getProductsLogic(ctx context.Context, queryParams string) (products []ProductResponse, err error) {
+func (r repository) getProducts(ctx context.Context, queryParams string) (products []ProductResponse, err error) {
 	query := `
-		SELECT p.id, p.name, p.price, p.image_url, 
+		SELECT p.id, p.name, p.image_url, p.price,
 		c.id category_id, c.name category_name,
 		m.id merchant_id, m.name merchant_name, m.city merchant_city
 		FROM products p 
@@ -33,9 +32,67 @@ func (r repository) getProductsLogic(ctx context.Context, queryParams string) (p
 		query += `WHERE LOWER(p.name) LIKE LOWER($1) OR LOWER(c.name) LIKE LOWER($1)`
 		queryParams = "%" + queryParams + "%"
 
-		fmt.Println(query)
-
 		rows, err := r.db.QueryContext(ctx, query, queryParams)
+		if err != nil {
+			return nil, err
+		}
+
+		defer rows.Close()
+
+		for rows.Next() {
+			var product ProductResponse
+			if err := rows.Scan(
+				&product.Id, &product.Name, &product.ImageUrl, &product.Price, 
+				&product.Category.Id, &product.Category.Name,
+				&product.Merchant.Id, &product.Merchant.Name, &product.Merchant.City,
+			); err != nil {
+				return nil, err
+			}
+			products = append(products, product)
+		}
+	} else {	
+		rows, err := r.db.QueryContext(ctx, query)
+		if err != nil {
+			return nil, err
+		}
+		
+		defer rows.Close()
+
+		for rows.Next() {
+			var product ProductResponse
+			if err := rows.Scan(
+				&product.Id, &product.Name, &product.Price, &product.ImageUrl,
+				&product.Category.Id, &product.Category.Name,
+				&product.Merchant.Id, &product.Merchant.Name, &product.Merchant.City,
+			); err != nil {
+				return nil, err
+			}
+			products = append(products, product)
+		}
+	}
+
+	return products, nil
+}
+
+func (r repository) getProductsByMerchant(ctx context.Context, queryParams string) (products []ProductResponse, err error) {
+	email := ctx.Value(constants.AUTH_EMAIL)
+	query := `
+		SELECT p.id, p.name, p.image_url, p.price,
+		c.id category_id, c.name category_name,
+		m.id merchant_id, m.name merchant_name, m.city merchant_city
+		FROM products p 
+		JOIN categories c
+		ON p.category_id = c.id
+		JOIN merchants m
+		ON p.merchant_id = m.id
+		WHERE m.email = $1
+	`
+
+	if queryParams != "" {
+		query += `AND LOWER(p.name) LIKE LOWER($2)`
+		queryParams = "%" + queryParams + "%"
+
+		rows, err := r.db.QueryContext(ctx, query, email, queryParams)
 		if err != nil {
 			return nil, err
 		}
@@ -54,7 +111,7 @@ func (r repository) getProductsLogic(ctx context.Context, queryParams string) (p
 			products = append(products, product)
 		}
 	} else {	
-		rows, err := r.db.QueryContext(ctx, query)
+		rows, err := r.db.QueryContext(ctx, query, email)
 		if err != nil {
 			return nil, err
 		}
