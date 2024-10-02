@@ -12,6 +12,7 @@ func Run(router chi.Router, db *sql.DB) {
 	handler := newHandler(svc)
 
 	router.Route("/v1/categories", func(r chi.Router) {
+		r.Get("/", handler.getCategoriesHandler)
 		r.Post("/", handler.addCategoryHandler)	
 	})
 }

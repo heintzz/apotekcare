@@ -57,3 +57,40 @@ func (h handler) addCategoryHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp.WriteJsonResponse(w)
 }
+
+func (h handler) getCategoriesHandler(w http.ResponseWriter, r *http.Request) {
+	categories, err := h.svc.categories(r.Context())
+	if err != nil {
+		errors, ok := helper.ErrorMapping[err.Error()]
+		if !ok {
+			errors = helper.ErrorGeneral
+		}
+		resp := helper.APIResponse{
+			HttpCode: errors.HttpCode,
+			Success: false,
+			Message: errors.ErrorMessage(),
+			Error:   err.Error(),
+			ErrorCode: errors.Code,
+		}
+
+		resp.WriteJsonResponse(w)
+		return
+	}
+
+	var data []categoryResponse
+
+	for _, category := range categories {
+		data = append(data,  categoryResponse{
+			Id: category.Id,
+			Name: category.Name,
+		})
+	}
+
+	resp := helper.APIResponse{
+		HttpCode: http.StatusOK,
+		Message: "SUCCESS",
+		Payload: data,
+	}
+
+	resp.WriteJsonResponse(w)
+}

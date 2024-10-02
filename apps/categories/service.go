@@ -6,6 +6,7 @@ import (
 )
 
 type repositoryContract interface {
+	getCategories(ctx context.Context) (categories []Category, err error)
 	addNewCategory(ctx context.Context, category Category) (err error)
 }
 
@@ -17,6 +18,17 @@ func newService(repo repositoryContract) service {
 	return service{
 		repo: repo,
 	}
+}
+
+func (s service) categories(ctx context.Context) (categories []Category, err error) {	
+	categories, err = s.repo.getCategories(ctx)
+	
+	if err != nil {
+		log.Println("[categories, getCategories] error :", err)
+		return
+	}
+
+	return
 }
 
 func (s service) addCategory(ctx context.Context, req createCategoryRequest) (err error) {
