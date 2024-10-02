@@ -1,9 +1,9 @@
 package main
 
 import (
-	"heintzz/ecommerce/apps"
-	"heintzz/ecommerce/external/database"
-	"heintzz/ecommerce/internal/utils"
+	"heintzz/apotekcare/apps"
+	"heintzz/apotekcare/external/database"
+	"heintzz/apotekcare/internal/utils"
 	"log"
 	"os"
 

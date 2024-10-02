@@ -2,7 +2,7 @@ package auth
 
 import (
 	"fmt"
-	"heintzz/ecommerce/internal/helper"
+	"heintzz/apotekcare/internal/helper"
 	"regexp"
 )
 

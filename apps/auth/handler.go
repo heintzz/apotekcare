@@ -3,8 +3,8 @@ package auth
 import (
 	"bytes"
 	"encoding/json"
-	"heintzz/ecommerce/internal/constants"
-	"heintzz/ecommerce/internal/helper"
+	"heintzz/apotekcare/internal/constants"
+	"heintzz/apotekcare/internal/helper"
 	"io"
 	"net/http"
 )

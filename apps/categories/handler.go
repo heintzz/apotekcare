@@ -2,7 +2,7 @@ package categories
 
 import (
 	"encoding/json"
-	"heintzz/ecommerce/internal/helper"
+	"heintzz/apotekcare/internal/helper"
 	"net/http"
 )
 

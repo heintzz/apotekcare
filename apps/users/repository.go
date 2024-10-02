@@ -3,7 +3,7 @@ package users
 import (
 	"context"
 	"database/sql"
-	"heintzz/ecommerce/internal/constants"
+	"heintzz/apotekcare/internal/constants"
 )
 
 type repository struct {

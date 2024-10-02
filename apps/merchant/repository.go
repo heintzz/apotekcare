@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"heintzz/ecommerce/internal/constants"
-	"heintzz/ecommerce/internal/helper"
+	"heintzz/apotekcare/internal/constants"
+	"heintzz/apotekcare/internal/helper"
 )
 
 type repository struct {

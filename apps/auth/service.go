@@ -3,9 +3,9 @@ package auth
 import (
 	"database/sql"
 	"fmt"
-	"heintzz/ecommerce/internal/constants"
-	"heintzz/ecommerce/internal/helper"
-	"heintzz/ecommerce/internal/utils"
+	"heintzz/apotekcare/internal/constants"
+	"heintzz/apotekcare/internal/helper"
+	"heintzz/apotekcare/internal/utils"
 	"log"
 )
 

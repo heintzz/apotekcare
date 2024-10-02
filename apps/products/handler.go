@@ -2,7 +2,7 @@ package products
 
 import (
 	"encoding/json"
-	"heintzz/ecommerce/internal/helper"
+	"heintzz/apotekcare/internal/helper"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"

@@ -1,7 +1,7 @@
 package users
 
 import (
-	"heintzz/ecommerce/internal/helper"
+	"heintzz/apotekcare/internal/helper"
 )
 
 type editProfileRequest struct {

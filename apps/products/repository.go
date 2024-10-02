@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"heintzz/ecommerce/internal/constants"
+	"heintzz/apotekcare/internal/constants"
 )
 
 type repository struct {

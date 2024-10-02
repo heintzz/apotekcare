@@ -1,6 +1,6 @@
 package categories
 
-import "heintzz/ecommerce/internal/helper"
+import "heintzz/apotekcare/internal/helper"
 
 type createCategoryRequest struct {
 	Name string `json:"name"`

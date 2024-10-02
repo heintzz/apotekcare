@@ -1,4 +1,4 @@
-module heintzz/ecommerce
+module heintzz/apotekcare
 
 go 1.22.1
 

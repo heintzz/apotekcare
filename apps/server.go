@@ -2,12 +2,12 @@ package apps
 
 import (
 	"database/sql"
-	"heintzz/ecommerce/apps/auth"
-	"heintzz/ecommerce/apps/categories"
-	"heintzz/ecommerce/apps/merchant"
-	"heintzz/ecommerce/apps/products"
-	"heintzz/ecommerce/apps/users"
-	"heintzz/ecommerce/internal/middleware"
+	"heintzz/apotekcare/apps/auth"
+	"heintzz/apotekcare/apps/categories"
+	"heintzz/apotekcare/apps/merchant"
+	"heintzz/apotekcare/apps/products"
+	"heintzz/apotekcare/apps/users"
+	"heintzz/apotekcare/internal/middleware"
 	"log"
 	"net/http"
 

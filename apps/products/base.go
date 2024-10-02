@@ -2,8 +2,8 @@ package products
 
 import (
 	"database/sql"
-	"heintzz/ecommerce/internal/constants"
-	"heintzz/ecommerce/internal/middleware"
+	"heintzz/apotekcare/internal/constants"
+	"heintzz/apotekcare/internal/middleware"
 
 	"github.com/go-chi/chi/v5"
 )

@@ -1,6 +1,6 @@
 package merchant
 
-import "heintzz/ecommerce/internal/helper"
+import "heintzz/apotekcare/internal/helper"
 
 type editMerchantRequest struct {
 	Name     string `json:"merchant_name"`

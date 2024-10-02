@@ -1,6 +1,6 @@
 package products
 
-import "heintzz/ecommerce/internal/helper"
+import "heintzz/apotekcare/internal/helper"
 
 type addProductRequest struct {
 	Name        string	`json:"name"`
