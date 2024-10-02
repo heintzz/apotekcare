@@ -3,6 +3,7 @@ package products
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"heintzz/ecommerce/internal/constants"
 )
 
@@ -220,4 +221,37 @@ func (r repository) getDetailProductByMerchant(ctx context.Context, productId st
 	}
 
 	return product, nil
+}
+
+func (r repository) getProductStock(ctx context.Context, req checkoutProductRequest) (stock int, err error) {	
+	query := `
+		SELECT stock 
+		FROM products
+		WHERE id = $1
+	`
+	
+	err = r.db.QueryRowContext(ctx, query, req.ProductId).Scan(&stock)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return 0, errors.New("product not found") 
+		}
+		return 0, err 
+	}
+
+	return stock, nil 
+}
+
+func (r repository) checkoutProduct(ctx context.Context, req checkoutProductRequest) (err error) {
+	query := `
+		UPDATE products
+		SET stock = stock - $1
+		WHERE id = $2
+	`
+
+	_, err = r.db.ExecContext(ctx, query, req.Quantity, req.ProductId)
+	if err != nil {
+		return err 
+	}
+
+	return
 }

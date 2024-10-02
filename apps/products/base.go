@@ -27,5 +27,10 @@ func Run(router chi.Router, db *sql.DB) {
 			r.Get("/merchant", handler.getProductsByMerchantHandler)					
 		})		
 	})	
+
+	router.Route("/v1/orders/checkout", func(r chi.Router) {
+		r.Use(middleware.CheckToken)		
+		r.Post("/", handler.checkoutProductHandler)		
+	})	
 }
 

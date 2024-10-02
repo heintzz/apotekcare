@@ -11,6 +11,11 @@ type addProductRequest struct {
 	CategoryId  int			`json:"category_id"`
 }
 
+type checkoutProductRequest struct {
+	ProductId int `json:"product_id"`
+	Quantity 	int `json:"quantity"`
+}
+
 type categoryResponse struct {
 	Id 	 int 		`json:"id"`
 	Name string `json:"name"`

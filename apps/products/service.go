@@ -2,6 +2,7 @@ package products
 
 import (
 	"context"
+	"fmt"
 	"log"
 )
 
@@ -11,6 +12,8 @@ type repositoryContract interface {
 	getProductsByMerchant(ctx context.Context, queryParams string) (products []ProductResponse, err error)
 	getDetailProduct(ctx context.Context, productId string) (product DetailProduct, err error)
 	getDetailProductByMerchant(ctx context.Context, productId string) (product DetailProduct, err error)
+	getProductStock(ctx context.Context, req checkoutProductRequest) (stock int, err error) 
+	checkoutProduct(ctx context.Context, req checkoutProductRequest) (err error) 
 }
 
 type service struct {
@@ -181,4 +184,22 @@ func (s service) merchantProduct(ctx context.Context, req getProductRequest) (pr
 	}
 
 	return 
+}
+
+func (s service) checkoutProduct(ctx context.Context, req checkoutProductRequest) (err error) {
+	stock, err := s.repo.getProductStock(ctx, req) 
+	if err != nil {
+		return
+	}
+
+	if stock < req.Quantity {
+		return fmt.Errorf("insufficient stock: available stock is %d, but %d requested", stock, req.Quantity)
+	}
+
+	err = s.repo.checkoutProduct(ctx, req)
+	if err != nil {
+		return
+	}
+
+	return
 }
